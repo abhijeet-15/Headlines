@@ -27,4 +27,11 @@ public class Articles {
         return url;
     }
 
+    private String description;
+
+    public String getDescription(){
+
+        return description;
+    }
+
 }

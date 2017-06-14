@@ -1,8 +1,12 @@
 package exercise.packagecom.headlines;
 
 import android.content.Context;
+import android.content.Intent;
 import android.icu.text.LocaleDisplayNames;
 import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerViewAdapter mAdapter;
     private List<String> mDatalist = new ArrayList<>();
     private List<String> mTitleList = new ArrayList<>();
+    private List<String> mdescriptionList = new ArrayList<>();
 
 
 
@@ -77,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
                             mDatalist.add(articles.getUrl().toString());
 
+                            mdescriptionList.add(articles.getDescription().toString());
+
 
 
                         }
@@ -111,7 +118,9 @@ public class MainActivity extends AppCompatActivity {
 }
 
 
- class RecyclerViewAdapter extends RecyclerView.Adapter<Holder>{
+ class RecyclerViewAdapter extends RecyclerView.Adapter<Holder> {
+
+
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -132,22 +141,49 @@ public class MainActivity extends AppCompatActivity {
     public int getItemCount() {
         return mDatalist.size();
     }
-}
+
+
+ }
 
 
 
 
-public class Holder extends RecyclerView.ViewHolder{
+public class Holder extends RecyclerView.ViewHolder {
 
     ImageView mImageView;
     TextView mtextview;
 
 
-    public Holder(View itemView) {
+
+    public Holder(final View itemView) {
         super(itemView);
 
         mImageView = (ImageView)itemView.findViewById(R.id.id_image_view);
         mtextview = (TextView) itemView.findViewById(R.id.id_textview);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int position1 = mRecyclerView.getChildLayoutPosition(v);
+                 String value = mdescriptionList.get(position1).toString();
+                String value2 = mDatalist.get(position1).toString();
+
+
+
+                // Toast.makeText(MainActivity.this, value,Toast.LENGTH_SHORT).show();
+
+
+
+
+                Intent intent = new Intent(MainActivity.this , DetailsActiivity.class);
+                intent.putExtra("key1",value);
+                intent.putExtra("key2",value2);
+                MainActivity.this.startActivity(intent);
+
+
+            }
+        });
     }
 
     public void bindData(final String url ,final String title){
@@ -167,7 +203,10 @@ public class Holder extends RecyclerView.ViewHolder{
 
         mtextview.setText(title);
     }
+
+
 }
+
 
 
 }
